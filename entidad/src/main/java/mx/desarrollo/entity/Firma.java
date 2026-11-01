@@ -30,7 +30,7 @@ public class Firma {
     private String ubicacion;
 
     @JdbcTypeCode(SqlTypes.LONGVARBINARY)
-    @Column(name = "fotografia", nullable = false)
+    @Column(name = "fotografia", nullable = true)
     private byte[] fotografia;
 
     public Integer getId() { return id; }

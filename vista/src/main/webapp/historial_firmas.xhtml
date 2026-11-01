@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Historial de Firmas - UABC</title>
+    <h:outputStylesheet library="css" name="PaginaNavegacion.css"/>
+</h:head>
+<h:body>
+
+    <div class="header-portal">
+        <div class="logo-container">
+            <h:graphicImage library="img" name="escudo_uabc.png" alt="Logo UABC" styleClass="logo-uabc"/>
+            <div class="titulo-universidad">
+                Universidad Autónoma<br/>de Baja California
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Botón para regresar al menú de firmas -->
+        <div style="margin-bottom: 1.5rem;">
+            <h:outputLink value="firmas.xhtml" styleClass="btn-volver">
+                &#8592; Volver al menú de firmas
+            </h:outputLink>
+        </div>
+
+        <h1 class="titulo-pagina">Historial de Firmas</h1>
+
+        <h:form id="formHistorial">
+            <p:growl id="mensajes" showDetail="true" life="3000"/>
+
+            <!-- Tabla de datos (Data Table) -->
+            <p:dataTable value="#{historialFirmasController.firmas}" var="firma"
+                         emptyMessage="No tienes firmas registradas."
+                         paginator="true" rows="10" style="margin-top: 20px;">
+
+                <p:column headerText="Fecha">
+                    <h:outputText value="#{firma.fecha}" />
+                </p:column>
+
+                <p:column headerText="Hora">
+                    <h:outputText value="#{firma.hora}" />
+                </p:column>
+
+                <p:column headerText="Ubicación">
+                    <h:outputText value="#{firma.ubicacion}" />
+                </p:column>
+
+                <p:column headerText="Acciones" style="width: 100px; text-align: center;">
+                    <!-- Botón de eliminar con confirmación -->
+                    <p:commandButton icon="pi pi-trash"
+                                     title="Eliminar Firma"
+                                     styleClass="ui-button-danger rounded-button"
+                                     action="#{historialFirmasController.eliminarFirma(firma.id)}"
+                                     update="formHistorial:mensajes @form">
+                        <p:confirm header="Confirmación"
+                                   message="¿Estás seguro de que deseas eliminar esta firma?"
+                                   icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <!-- Diálogo de Confirmación Global de PrimeFaces -->
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                <p:commandButton value="Eliminar" type="button" styleClass="ui-confirmdialog-yes ui-button-danger" />
+            </p:confirmDialog>
+        </h:form>
+    </div>
+
+    <div class="footer-portal">
+        <p>Universidad Autónoma de Baja California</p>
+    </div>
+
+</h:body>
+</html>

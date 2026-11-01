@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Registrar Firma</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; max-width: 400px; }
+        .btn { background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        .btn:hover { background-color: #0056b3; }
+        .btn-bloqueado { opacity: 0.5; pointer-events: none; cursor: not-allowed; }
+        .estado { margin-top: 10px; font-weight: bold; }
+    </style>
+</h:head>
+<h:body>
+
+    <div class="card">
+        <h2>Registro de Firma GPS</h2>
+
+        <h:form id="formFirma">
+            <h:messages globalOnly="true" style="color: red;" />
+
+            <h:inputHidden id="inputUbicacion" value="#{firmaController.ubicacion}" />
+
+            <div class="estado">
+                <p>Ubicación GPS: <span id="txtUbicacion" style="color: gray;">Obteniendo coordenadas...</span></p>
+            </div>
+
+            <!-- Botón habilitado en JSF, controlado por clase CSS btn-bloqueado -->
+            <p:commandButton id="btnGuardar"
+                             value="Guardar Firma"
+                             action="#{firmaController.guardarFirma}"
+                             ajax="false"
+                             styleClass="btn btn-bloqueado" />
+        </h:form>
+    </div>
+
+    <script>
+        function capturarCoordenadas() {
+            var txtUbicacion = document.getElementById("txtUbicacion");
+            var inputHidden = document.getElementById("formFirma:inputUbicacion");
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        var coords = position.coords.latitude + "," + position.coords.longitude;
+                        inputHidden.value = coords;
+                        txtUbicacion.textContent = coords;
+                        txtUbicacion.style.color = "green";
+
+                        // Habilitar visualmente el botón removiendo la clase deshabilitada
+                        var btnElement = document.getElementById("formFirma:btnGuardar");
+                        if (btnElement) {
+                            btnElement.classList.remove("btn-bloqueado");
+                        }
+                    },
+                    function(error) {
+                        txtUbicacion.textContent = "Error GPS: " + error.message;
+                        txtUbicacion.style.color = "red";
+                    },
+                    { enableHighAccuracy: true }
+                );
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            capturarCoordenadas();
+        });
+    </script>
+
+</h:body>
+</html>

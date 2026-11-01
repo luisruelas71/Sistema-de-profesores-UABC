@@ -18,8 +18,6 @@ public class FacadeProfesor {
         if (correoLimpio.length() > 60 || !FORMATO_CORREO.matcher(correoLimpio).matches()) {
             throw new IllegalArgumentException("El formato del correo no es válido");
         }
-        // Pendiente de confirmar con el cliente: restringir al dominio institucional.
-
         Profesor profesor = ServiceLocator.getProfesorDAO().buscarPorCorreo(correoLimpio);
         if (profesor == null || !contrasenaValida(contrasena, profesor.getContrasena())) {
             return null;
@@ -33,12 +31,10 @@ public class FacadeProfesor {
         }
         String planaLimpia = plana.trim();
         String hashLimpio = hash.trim();
-        // 1. Comparación directa para texto plano ("Admin" == "Admin")
-        if (planaLimpia.equals(hashLimpio)) {
+        if (planaLimpia.equals(hashLimpio)) {  // Comparación directa para texto plano
             return true;
         }
-        // 2. Comparación por BCrypt si está encriptada
-        try {
+        try {         // Comparación por BCrypt si está encriptada
             return BCrypt.checkpw(planaLimpia, hashLimpio);
         } catch (IllegalArgumentException e) {
             return false;

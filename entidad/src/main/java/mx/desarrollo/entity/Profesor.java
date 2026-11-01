@@ -16,7 +16,7 @@ public class Profesor {
     @Column(name = "correo_institucional", nullable = false, length = 60, unique = true)
     private String correoInstitucional;
 
-    @Column(name = "contraseña", nullable = false, length = 60)
+    @Column(name = "contraseña", nullable = false, length = 60, columnDefinition = "CHAR(60)")
     private String contraseña;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
