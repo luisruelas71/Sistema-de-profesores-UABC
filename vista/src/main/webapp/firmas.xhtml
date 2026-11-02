@@ -10,6 +10,7 @@
 </h:head>
 <h:body>
 
+    <p:growl id="growlMensajes" showDetail="true" life="4000" />
 
     <div class="header-portal">
         <div class="logo-container">
@@ -21,7 +22,6 @@
     </div>
 
     <div class="main-container">
-        <!-- Botón para regresar al inicio -->
         <div style="margin-bottom: 1.5rem;">
             <h:outputLink value="inicio.xhtml" styleClass="btn-volver">
                 &#8592; Volver al inicio
@@ -32,7 +32,6 @@
         <p class="descripcion-pagina">Selecciona la opción que deseas realizar.</p>
 
         <div class="grid-tarjetas">
-            <!-- Registrar Firmas Navega a captura_foto.xhtml -->
             <h:outputLink value="captura_foto.xhtml" styleClass="card-link">
                 <div class="card card-verde">
                     <div>
@@ -49,7 +48,6 @@
                 </div>
             </h:outputLink>
 
-            <!-- Historial de firmas -->
             <h:outputLink value="#" styleClass="card-link">
                 <div class="card card-blanca">
                     <div>
@@ -66,7 +64,6 @@
                 </div>
             </h:outputLink>
 
-            <!-- Eliminar Firmas -->
             <h:outputLink value="#" class="card-link">
                 <div class="card card-blanca">
                     <div>

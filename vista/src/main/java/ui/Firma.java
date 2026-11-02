@@ -51,7 +51,6 @@ public class Firma implements Serializable {
 
         Integer profesorId = (idObj instanceof Integer) ? (Integer) idObj : Integer.parseInt(idObj.toString());
 
-
         if (this.ubicacion == null || this.ubicacion.isBlank()) {
             mostrarMensaje(FacesMessage.SEVERITY_ERROR, "No se capturó la ubicación GPS.");
             return null;
@@ -66,6 +65,13 @@ public class Firma implements Serializable {
             firmaEntidad.setFecha(LocalDate.now());
             firmaEntidad.setHora(LocalTime.now());
             firmaEntidad.setUbicacion(this.ubicacion);
+
+            // --- SOLUCIÓN TEMPORAL PARA LA FOTO ---
+            if (this.fotografia == null) {
+                this.fotografia = new byte[1];
+            }
+            // -------------------------------------
+
             firmaEntidad.setFotografia(this.fotografia);
 
             boolean exito = new DelegateFirma().registrarFirma(firmaEntidad);
@@ -87,9 +93,41 @@ public class Firma implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severidad, mensaje, null));
     }
 
-    public String getUbicacion() { return ubicacion; }
-    public void setUbicacion(String ubicacion) { this.ubicacion = ubicacion; }
+    public String getUbicacion() {
+        return ubicacion;
+    }
 
-    public byte[] getFotografia() { return fotografia; }
-    public void setFotografia(byte[] fotografia) { this.fotografia = fotografia; }
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public byte[] getFotografia() {
+        return fotografia;
+    }
+
+    public void setFotografia(byte[] fotografia) {
+        this.fotografia = fotografia;
+    }
+
+
+    public String rechazarFirma() {
+        this.fotografia = null;
+        this.ubicacion = null;
+
+        mostrarMensaje(FacesMessage.SEVERITY_WARN, "Cancelado: No se registró la firma.");
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+
+        return "captura_foto?faces-redirect=true";
+    }
+
+    public String guardarFirmaFinal() {
+        String resultado = guardarFirma();
+
+        if ("firmas?faces-redirect=true".equals(resultado)) {
+            mostrarMensaje(FacesMessage.SEVERITY_INFO, "Éxito: La firma se registró correctamente.");
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+        }
+
+        return resultado;
+    }
 }
