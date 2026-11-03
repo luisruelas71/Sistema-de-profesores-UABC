@@ -5,36 +5,141 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Registrar Firma</title>
+    <title>Confirmación de firma</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 30px; }
-        .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; max-width: 400px; }
-        .btn { background-color: #007bff; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
-        .btn:hover { background-color: #0056b3; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .titulo-pantalla {
+            color: #333333;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            flex-grow: 1; /* Permite que el contenedor crezca y llene la pantalla */
+        }
+
+        .form-firma {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            flex-grow: 1; /* El formulario ocupa el espacio restante */
+        }
+
+        .foto-preview {
+            width: 100%;
+            height: 350px;
+            background-color: #F5F5F5;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #888888;
+            font-size: 20px;
+        }
+        .foto-preview i { font-size: 64px; margin-bottom: 15px; }
+
+        .gps-box {
+            width: 100%;
+            padding: 30px;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            text-align: center;
+            color: #333333;
+            font-size: 20px;
+            box-sizing: border-box;
+        }
+
+        .botones-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            width: 100%;
+            margin-top: auto; /* Esto empuja los botones hasta el límite inferior */
+        }
+
+        .btn-rechazar, .btn-aceptar {
+            flex: 1;
+            font-size: 20px !important;
+            padding: 20px !important;
+            border-radius: 12px !important;
+            font-weight: bold !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+            text-align: center;
+        }
+
+        .btn-rechazar {
+            background-color: transparent !important;
+            color: #D32F2F !important;
+            border: 2px solid #D32F2F !important;
+        }
+        .btn-rechazar:hover { background-color: #FFF0F0 !important; }
+
+        .btn-aceptar {
+            background-color: #006B3F !important;
+            color: white !important;
+            border: none !important;
+        }
+        .btn-aceptar:hover { background-color: #00502F !important; }
+
         .btn-bloqueado { opacity: 0.5; pointer-events: none; cursor: not-allowed; }
-        .estado { margin-top: 10px; font-weight: bold; }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </h:head>
 <h:body>
 
-    <div class="card">
-        <h2>Registro de Firma GPS</h2>
+    <div class="titulo-pantalla">Confirmación de firma</div>
 
-        <h:form id="formFirma">
+    <div class="main-container">
+
+        <div class="foto-preview">
+            <i class="fa-regular fa-image"></i>
+            <span>Captured Photo</span>
+        </div>
+
+        <h:form id="formFirma" styleClass="form-firma">
             <h:messages globalOnly="true" style="color: red;" />
 
             <h:inputHidden id="inputUbicacion" value="#{firmaController.ubicacion}" />
 
-            <div class="estado">
-                <p>Ubicación GPS: <span id="txtUbicacion" style="color: gray;">Obteniendo coordenadas...</span></p>
+            <div class="gps-box">
+                <span id="txtUbicacion" style="color: gray;">Obteniendo coordenadas...</span>
             </div>
 
-            <!-- Botón habilitado en JSF, controlado por clase CSS btn-bloqueado -->
-            <p:commandButton id="btnGuardar"
-                             value="Guardar Firma"
-                             action="#{firmaController.guardarFirma}"
-                             ajax="false"
-                             styleClass="btn btn-bloqueado" />
+            <div class="botones-container">
+                <p:commandButton value="Rechazar"
+                                 action="#{firmaController.rechazarFirma}"
+                                 ajax="false"
+                                 styleClass="btn-rechazar" />
+
+                <p:commandButton id="btnGuardar"
+                                 value="Aceptar Firma"
+                                 action="#{firmaController.guardarFirmaFinal}"
+                                 ajax="false"
+                                 styleClass="btn-aceptar btn-bloqueado" />
+            </div>
         </h:form>
     </div>
 
@@ -46,12 +151,11 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function(position) {
-                        var coords = position.coords.latitude + "," + position.coords.longitude;
+                        var coords = position.coords.latitude + ", " + position.coords.longitude;
                         inputHidden.value = coords;
-                        txtUbicacion.textContent = coords;
-                        txtUbicacion.style.color = "green";
+                        txtUbicacion.textContent = "Ubicación GPS: " + coords;
+                        txtUbicacion.style.color = "#333333";
 
-                        // Habilitar visualmente el botón removiendo la clase deshabilitada
                         var btnElement = document.getElementById("formFirma:btnGuardar");
                         if (btnElement) {
                             btnElement.classList.remove("btn-bloqueado");
@@ -63,6 +167,9 @@
                     },
                     { enableHighAccuracy: true }
                 );
+            } else {
+                txtUbicacion.textContent = "Geolocalización no soportada por el navegador.";
+                txtUbicacion.style.color = "red";
             }
         }
 
