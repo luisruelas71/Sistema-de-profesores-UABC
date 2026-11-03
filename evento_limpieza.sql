@@ -1,0 +1,8 @@
+USE sistema_profesores;
+SET GLOBAL event_scheduler = ON;
+
+CREATE EVENT IF NOT EXISTS limpieza_automatica_firmas
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_TIMESTAMP
+DO
+    DELETE FROM firma WHERE fecha < DATE_SUB(CURDATE(), INTERVAL 2 MONTH);

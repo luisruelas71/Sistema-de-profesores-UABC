@@ -31,7 +31,7 @@ CREATE TABLE firma (
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
     ubicacion VARCHAR(40) NOT NULL,
-    fotografia MEDIUMBLOB NOT NULL,
+    fotografia MEDIUMBLOB NULL,
     FOREIGN KEY (id_profesor) REFERENCES profesor (id_profesor)
 );
 
