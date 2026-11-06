@@ -6,6 +6,7 @@ import java.util.List;
 
 public class FirmaDAO {
 
+    // Registrar firma
     public boolean guardar(Firma firma) {
         EntityManager em = hibernateUtils.getEntityManager();
         try {
