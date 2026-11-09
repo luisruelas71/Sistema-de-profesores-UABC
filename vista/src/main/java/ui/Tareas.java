@@ -46,13 +46,14 @@ public class Tareas implements Serializable {
             DelegateTarea delegate = new DelegateTarea();
             delegate.registrarTarea(nuevaTarea);
 
-            // muestra el  mensaje de éxito y limpiar el formulario
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+
+            // Muestra el mensaje de éxito
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Tarea guardada correctamente", null));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Tarea guardada correctamente"));
             limpiarCampos();
 
-            // Return a la misma página o redirigir a donde se necesite
-            return null;
+            return "gestion_tareas.xhtml?faces-redirect=true";
 
         } catch (IllegalArgumentException e) {
             mostrarError(e.getMessage());

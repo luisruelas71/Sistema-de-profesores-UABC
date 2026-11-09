@@ -45,7 +45,12 @@
                                      icon="pi pi-trash"
                                      action="#{historialTareasController.eliminarTarea(tarea.id)}"
                                      update="@form"
-                                     styleClass="ui-button-danger"/>
+                                     styleClass="ui-button-danger">
+                        <!-- Confirmacion de eliminar -->
+                        <p:confirm header="Confirmación"
+                                   message="¿Estás seguro de que deseas eliminar esta tarea?"
+                                   icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
                 </p:column>
 
             </p:dataTable>
@@ -57,6 +62,12 @@
                       icon="pi pi-arrow-left"/>
 
         </p:panel>
+
+        <!-- ventana de confirmacion -->
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+            <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+            <p:commandButton value="Eliminar" type="button" styleClass="ui-confirmdialog-yes ui-button-danger" />
+        </p:confirmDialog>
 
     </h:form>
 
