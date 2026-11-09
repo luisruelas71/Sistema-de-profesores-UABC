@@ -22,7 +22,7 @@ public class Tareas implements Serializable {
 
     public String guardarTarea() {
         try {
-            // obtiene la ID del profesor desde la sesión
+
             Map<String, Object> sesion = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
             Integer idProfesor = (Integer) sesion.get("profesorId");
 
@@ -48,7 +48,6 @@ public class Tareas implements Serializable {
 
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
-            // Muestra el mensaje de éxito
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Tarea guardada correctamente"));
             limpiarCampos();

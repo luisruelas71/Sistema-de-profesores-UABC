@@ -1,75 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-
 <h:head>
-    <title>Historial de tareas - UABC</title>
+    <title>Historial de Tareas</title>
+
+    <h:outputStylesheet name="css/PaginaNavegacion.css" />
 </h:head>
-
 <h:body>
+    <div style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+        <h2 style="color: #1a202c; font-family: 'Segoe UI', sans-serif;">Historial de Tareas</h2>
 
-    <h:form id="formHistorial">
+        <h:form id="formTareas">
+            <p:growl id="messages" showDetail="true" life="3000" />
 
-        <p:panel header="Historial de tareas">
+            <p:dataTable id="tablaTareas" value="#{historialTareasController.tareas}" var="tarea"
+                         widgetVar="tareasTable" emptyMessage="No hay tareas registradas."
+                         filteredValue="#{historialTareasController.tareasFiltradas}"
+                         rowKey="#{tarea.id}"
+                         style="background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
 
-            <p:messages id="mensajes" showDetail="true" closable="true"/>
-
-            <p:dataTable value="#{historialTareasController.tareas}"
-                         var="tarea"
-                         emptyMessage="No tienes tareas registradas.">
-
-                <p:column headerText="Título">
-                    <h:outputText value="#{tarea.titulo}"/>
+                <p:column headerText="Título" sortBy="#{tarea.titulo}">
+                    <h:outputText value="#{tarea.titulo}" />
                 </p:column>
 
                 <p:column headerText="Descripción">
-                    <h:outputText value="#{tarea.descripcion}"/>
+                    <h:outputText value="#{tarea.descripcion}" />
                 </p:column>
 
-                <p:column headerText="Fecha límite">
+                <p:column headerText="Fecha límite" sortBy="#{tarea.fechaLimite}">
                     <h:outputText value="#{tarea.fechaLimite}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"
-                                           type="localDateTime"/>
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" type="localDateTime" />
                     </h:outputText>
                 </p:column>
 
-                <p:column headerText="Prioridad">
-                    <h:outputText value="#{tarea.prioridad}"/>
+                <p:column headerText="Prioridad" sortBy="#{tarea.pesoPrioridad}">
+                    <h:outputText value="#{tarea.prioridad}" />
                 </p:column>
 
-                <p:column headerText="Acciones">
-                    <p:commandButton value="Eliminar"
-                                     icon="pi pi-trash"
-                                     action="#{historialTareasController.eliminarTarea(tarea.id)}"
-                                     update="@form"
-                                     styleClass="ui-button-danger">
-                        <!-- Confirmacion de eliminar -->
-                        <p:confirm header="Confirmación"
-                                   message="¿Estás seguro de que deseas eliminar esta tarea?"
-                                   icon="pi pi-exclamation-triangle"/>
-                    </p:commandButton>
+                <p:column headerText="Estado" sortBy="#{tarea.completado}" filterBy="#{tarea.completado}" filterMatchMode="equals">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('tareasTable').filter()" style="width: 100%;">
+                            <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItem itemLabel="Completada" itemValue="true" />
+                            <f:selectItem itemLabel="Pendiente" itemValue="false" />
+                        </p:selectOneMenu>
+                    </f:facet>
+
+                    <h:outputText value="#{tarea.completado ? 'Completada' : 'Pendiente'}"
+                                  styleClass="#{tarea.completado ? 'estado-completada' : 'estado-pendiente'}" />
                 </p:column>
 
+                <p:column headerText="Acciones" style="text-align: center; width: 320px;">
+                    <!-- Contenedor flexbox para separar los botones con gap -->
+                    <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+
+                        <p:commandButton icon="pi pi-check" value="Completar"
+                                         action="#{historialTareasController.cambiarEstado(tarea.id, true)}"
+                                         update="formTareas:tablaTareas formTareas:messages"
+                                         oncomplete="PF('tareasTable').filter()"
+                                         rendered="#{not tarea.completado}"
+                                         styleClass="ui-button-success" />
+
+                        <p:commandButton icon="pi pi-refresh" value="Pendiente"
+                                         action="#{historialTareasController.cambiarEstado(tarea.id, false)}"
+                                         update="formTareas:tablaTareas formTareas:messages"
+                                         oncomplete="PF('tareasTable').filter()"
+                                         rendered="#{tarea.completado}"
+                                         styleClass="ui-button-warning" />
+
+                        <p:commandButton icon="pi pi-trash" value="Eliminar"
+                                         action="#{historialTareasController.eliminarTarea(tarea.id)}"
+                                         update="formTareas:tablaTareas formTareas:messages"
+                                         oncomplete="PF('tareasTable').filter()"
+                                         styleClass="ui-button-danger" />
+                    </div>
+                </p:column>
             </p:dataTable>
 
-            <br/>
-
-            <p:button value="Volver al inicio"
-                      outcome="inicio.xhtml"
-                      icon="pi pi-arrow-left"/>
-
-        </p:panel>
-
-        <!-- ventana de confirmacion -->
-        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-            <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-            <p:commandButton value="Eliminar" type="button" styleClass="ui-confirmdialog-yes ui-button-danger" />
-        </p:confirmDialog>
-
-    </h:form>
-
+            <div style="margin-top: 20px;">
+                <p:commandButton value="Volver al menú" icon="pi pi-arrow-left"
+                                 action="gestion_tareas?faces-redirect=true"
+                                 styleClass="btn-uabc-outline" />
+            </div>
+        </h:form>
+    </div>
 </h:body>
 </html>
