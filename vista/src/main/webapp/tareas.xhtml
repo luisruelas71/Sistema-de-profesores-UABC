@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Registrar tarea</title>
+</h:head>
+
+<h:body>
+
+    <h:form id="formTarea">
+
+        <p:panel header="Registrar nueva tarea">
+
+            <p:messages id="mensajes" showDetail="true" closable="true"/>
+
+            <p:panelGrid columns="2" layout="grid"
+                         styleClass="ui-fluid"
+                         columnClasses="col-4,col-8">
+
+                <p:outputLabel for="titulo" value="Título:"/>
+                <p:inputText id="titulo"
+                             value="#{tareasController.titulo}"
+                             maxlength="50"
+                             required="true"
+                             requiredMessage="El título es obligatorio."/>
+
+                <p:outputLabel for="descripcion" value="Descripción:"/>
+                <p:inputTextarea id="descripcion"
+                                 value="#{tareasController.descripcion}"
+                                 maxlength="200"
+                                 rows="4"
+                                 autoResize="true"
+                                 required="true"
+                                 requiredMessage="La descripción es obligatoria."/>
+
+                <p:outputLabel for="fechaLimite" value="Fecha límite:"/>
+                <p:datePicker id="fechaLimite"
+                              value="#{tareasController.fechaLimite}"
+                              pattern="dd/MM/yyyy HH:mm"
+                              showTime="true"
+                              hourFormat="24"
+                              required="true"
+                              requiredMessage="La fecha límite es obligatoria."/>
+
+                <p:outputLabel for="prioridad" value="Prioridad:"/>
+                <p:selectOneMenu id="prioridad"
+                                 value="#{tareasController.prioridad}"
+                                 required="true"
+                                 requiredMessage="Selecciona una prioridad.">
+                    <f:selectItem itemLabel="Selecciona una prioridad"
+                                  itemValue=""
+                                  noSelectionOption="true"/>
+                    <f:selectItem itemLabel="Urgente" itemValue="urgente"/>
+                    <f:selectItem itemLabel="Alta" itemValue="alta"/>
+                    <f:selectItem itemLabel="Media" itemValue="media"/>
+                    <f:selectItem itemLabel="Baja" itemValue="baja"/>
+                </p:selectOneMenu>
+
+            </p:panelGrid>
+
+            <p:separator/>
+
+            <p:commandButton value="Guardar tarea"
+                             action="#{tareasController.guardarTarea}"
+                             update="formTarea"
+                             icon="pi pi-save"/>
+
+            <p:button value="Volver al menú de tareas"
+                      outcome="gestion_tareas.xhtml"
+                      icon="pi pi-arrow-left"
+                      style="margin-left: 15px;"/>
+
+        </p:panel>
+
+    </h:form>
+
+</h:body>
+</html>

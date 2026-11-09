@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Historial de tareas - UABC</title>
+</h:head>
+
+<h:body>
+
+    <h:form id="formHistorial">
+
+        <p:panel header="Historial de tareas">
+
+            <p:messages id="mensajes" showDetail="true" closable="true"/>
+
+            <p:dataTable value="#{historialTareasController.tareas}"
+                         var="tarea"
+                         emptyMessage="No tienes tareas registradas.">
+
+                <p:column headerText="Título">
+                    <h:outputText value="#{tarea.titulo}"/>
+                </p:column>
+
+                <p:column headerText="Descripción">
+                    <h:outputText value="#{tarea.descripcion}"/>
+                </p:column>
+
+                <p:column headerText="Fecha límite">
+                    <h:outputText value="#{tarea.fechaLimite}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+                                           type="localDateTime"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Prioridad">
+                    <h:outputText value="#{tarea.prioridad}"/>
+                </p:column>
+
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Eliminar"
+                                     icon="pi pi-trash"
+                                     action="#{historialTareasController.eliminarTarea(tarea.id)}"
+                                     update="@form"
+                                     styleClass="ui-button-danger"/>
+                </p:column>
+
+            </p:dataTable>
+
+            <br/>
+
+            <p:button value="Volver al inicio"
+                      outcome="inicio.xhtml"
+                      icon="pi pi-arrow-left"/>
+
+        </p:panel>
+
+    </h:form>
+
+</h:body>
+</html>
