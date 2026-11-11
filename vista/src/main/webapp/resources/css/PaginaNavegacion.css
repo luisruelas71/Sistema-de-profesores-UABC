@@ -238,3 +238,78 @@ body {
     height: 3px;
     background-color: var(--uabc-ocre);
 }
+
+body {
+    background-color: #f4f6f8;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.btn-uabc:hover {
+    background-color: #005c2b !important;
+    border-color: #005c2b !important;
+}
+
+.btn-uabc-outline:hover {
+    background-color: #e6f2eb !important;
+}
+.card-uabc {
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    background: white;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 900px;
+}
+.estado-completada {
+    background-color: #e6f2eb;
+    color: #007738;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.estado-pendiente {
+    background-color: #fff3e0;
+    color: #d97706;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+body .ui-button.btn-uabc {
+    background-color: #007738 !important;
+    border-color: #007738 !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+body .ui-button.btn-uabc:hover,
+body .ui-button.btn-uabc:focus,
+body .ui-button.btn-uabc:active {
+    background-color: #005c2b !important;
+    border-color: #005c2b !important;
+    color: white !important;
+}
+
+body .ui-button.btn-uabc-outline {
+    background-color: transparent !important;
+    border: 2px solid #007738 !important;
+    color: #007738 !important;
+    font-weight: bold !important;
+}
+
+body .ui-button.btn-uabc-outline:hover,
+body .ui-button.btn-uabc-outline:focus,
+body .ui-button.btn-uabc-outline:active {
+    background-color: #e6f2eb !important;
+    color: #005c2b !important;
+    border-color: #005c2b !important;
+}
+
+.ui-card, .menu-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.ui-card:hover, .menu-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15) !important;
+}

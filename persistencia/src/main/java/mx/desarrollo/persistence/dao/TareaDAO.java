@@ -32,7 +32,6 @@ public class TareaDAO {
         }
     }
 
-    // Obtener todas las tareas de un profesor específico
     public List<Tarea> buscarPorProfesor(int idProfesor) {
         EntityManager em = hibernateUtils.getEntityManager();
 
@@ -48,7 +47,6 @@ public class TareaDAO {
         }
     }
 
-    // Actualizar una tarea existente
     public void actualizar(Tarea tarea) {
         EntityManager em = hibernateUtils.getEntityManager();
 
@@ -71,7 +69,29 @@ public class TareaDAO {
         }
     }
 
-    // Eliminar una tarea perteneciente al profesor
+    public void cambiarEstado(int idTarea, boolean estado) {
+        EntityManager em = hibernateUtils.getEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            Tarea tarea = em.find(Tarea.class, idTarea);
+
+            if (tarea != null) {
+                tarea.setCompletado(estado);
+                em.merge(tarea);
+            }
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Error al cambiar estado de la tarea", e);
+        } finally {
+            em.close();
+        }
+    }
+
     public boolean eliminar(int idTarea, int idProfesor) {
         EntityManager em = hibernateUtils.getEntityManager();
 

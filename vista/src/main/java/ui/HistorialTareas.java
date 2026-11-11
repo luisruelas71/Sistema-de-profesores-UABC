@@ -1,9 +1,9 @@
 package ui;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped; // <-- CAMBIO DE IMPORT
 import jakarta.inject.Named;
 
 import java.io.Serializable;
@@ -15,10 +15,14 @@ import mx.desarrollo.delegate.DelegateTarea;
 import mx.desarrollo.entity.Tarea;
 
 @Named("historialTareasController")
-@RequestScoped
+@ViewScoped
 public class HistorialTareas implements Serializable {
 
+
     private List<Tarea> tareas = new ArrayList<>();
+
+    private List<Tarea> tareasFiltradas;
+
     private final DelegateTarea delegate = new DelegateTarea();
 
     @PostConstruct
@@ -30,6 +34,8 @@ public class HistorialTareas implements Serializable {
 
         if (idProfesor != null) {
             tareas = delegate.consultarTareas(idProfesor);
+
+            tareasFiltradas = null;
         }
     }
 
@@ -42,7 +48,7 @@ public class HistorialTareas implements Serializable {
 
             if (idProfesor == null) {
                 mostrarMensaje(FacesMessage.SEVERITY_ERROR,
-                        "No hay una sesiÃ³n activa.");
+                        "No hay una sesión activa.");
                 return;
             }
 
@@ -53,14 +59,32 @@ public class HistorialTareas implements Serializable {
                         "Tarea eliminada correctamente.");
             } else {
                 mostrarMensaje(FacesMessage.SEVERITY_WARN,
-                        "No se encontrÃ³ la tarea.");
+                        "No se encontró la tarea.");
             }
 
             cargarTareas();
 
         } catch (Exception e) {
             mostrarMensaje(FacesMessage.SEVERITY_ERROR,
-                    "OcurriÃ³ un error al eliminar la tarea.");
+                    "Ocurrió un error al eliminar la tarea.");
+        }
+    }
+
+    public void cambiarEstado(Integer idTarea, boolean completado) {
+        try {
+            delegate.cambiarEstado(idTarea, completado);
+
+            String msj = completado ? "La tarea ha sido marcada como completada." : "La tarea ha vuelto a pendiente.";
+            String titulo = completado ? "Éxito" : "Aviso";
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, titulo, msj));
+
+            cargarTareas();
+
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo actualizar el estado."));
         }
     }
 
@@ -72,5 +96,16 @@ public class HistorialTareas implements Serializable {
     public List<Tarea> getTareas() {
         return tareas;
     }
-}
 
+    public void setTareas(List<Tarea> tareas) {
+        this.tareas = tareas;
+    }
+
+    public List<Tarea> getTareasFiltradas() {
+        return tareasFiltradas;
+    }
+
+    public void setTareasFiltradas(List<Tarea> tareasFiltradas) {
+        this.tareasFiltradas = tareasFiltradas;
+    }
+}

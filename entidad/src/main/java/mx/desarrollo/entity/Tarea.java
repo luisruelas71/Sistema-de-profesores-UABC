@@ -2,6 +2,7 @@ package mx.desarrollo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tarea")
@@ -31,6 +32,7 @@ public class Tarea {
     @Column(name = "completado", nullable = false)
     private Boolean completado = false;
 
+
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
@@ -51,4 +53,20 @@ public class Tarea {
 
     public Boolean getCompletado() { return completado; }
     public void setCompletado(Boolean completado) { this.completado = completado; }
+
+    @Transient
+    public Integer getPesoPrioridad() {
+        if (this.prioridad == null) return 0;
+
+        switch (this.prioridad.toLowerCase()) {
+            case "media":
+                return 1;
+            case "alta":
+                return 2;
+            case "urgente":
+                return 3;
+            default:
+                return 0;
+        }
+    }
 }

@@ -23,13 +23,20 @@ public class FacadeTarea {
         ServiceLocator.getTareaDAO().guardar(tarea);
     }
 
-    // Consultar tareas de un profesor
     public List<Tarea> consultarTareas(int idProfesor) {
         return ServiceLocator.getTareaDAO().buscarPorProfesor(idProfesor);
     }
 
-    // Eliminar una tarea de un profesor
     public boolean eliminarTarea(int idTarea, int idProfesor) {
         return ServiceLocator.getTareaDAO().eliminar(idTarea, idProfesor);
     }
+
+    public void actualizarTarea(Tarea tarea) {
+        mx.desarrollo.persistence.integration.ServiceLocator.getTareaDAO().actualizar(tarea);
+    }
+
+    public void cambiarEstado(int idTarea, boolean estado) {
+        mx.desarrollo.persistence.integration.ServiceLocator.getTareaDAO().cambiarEstado(idTarea, estado);
+    }
 }
+

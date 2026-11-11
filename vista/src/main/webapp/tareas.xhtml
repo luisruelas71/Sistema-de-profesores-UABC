@@ -1,81 +1,65 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-
 <h:head>
-    <title>Registrar tarea</title>
+    <title>Registrar Tarea</title>
+    <h:outputStylesheet name="css/PaginaNavegacion.css" />
 </h:head>
-
 <h:body>
+    <div style="padding: 2rem;">
 
-    <h:form id="formTarea">
+        <p:card styleClass="card-uabc">
+            <f:facet name="title">
+                <h:outputText value="Registrar nueva tarea" style="color: #1a202c; font-size: 24px; font-weight: bold; display: block; margin-bottom: 10px;"/>
+            </f:facet>
 
-        <p:panel header="Registrar nueva tarea">
+            <h:form id="formRegistro">
+                <p:messages id="mensajes" showDetail="true" closable="true"/>
 
-            <p:messages id="mensajes" showDetail="true" closable="true"/>
+                <h:panelGrid columns="1" cellpadding="8" style="width: 100%;">
 
-            <p:panelGrid columns="2" layout="grid"
-                         styleClass="ui-fluid"
-                         columnClasses="col-4,col-8">
+                    <p:outputLabel for="titulo" value="Título: *" style="font-weight: 600;"/>
+                    <p:inputText id="titulo" value="#{tareasController.titulo}" required="true"
+                                 style="width: 100%;"/>
 
-                <p:outputLabel for="titulo" value="Título:"/>
-                <p:inputText id="titulo"
-                             value="#{tareasController.titulo}"
-                             maxlength="50"
-                             required="true"
-                             requiredMessage="El título es obligatorio."/>
+                    <p:outputLabel for="descripcion" value="Descripción: *" style="font-weight: 600;"/>
+                    <p:inputTextarea id="descripcion" value="#{tareasController.descripcion}" required="true"
+                                     rows="4" style="width: 100%;"/>
 
-                <p:outputLabel for="descripcion" value="Descripción:"/>
-                <p:inputTextarea id="descripcion"
-                                 value="#{tareasController.descripcion}"
-                                 maxlength="200"
-                                 rows="4"
-                                 autoResize="true"
-                                 required="true"
-                                 requiredMessage="La descripción es obligatoria."/>
+                    <!-- Selector de Fecha Y HORA -->
+                    <p:outputLabel for="fecha" value="Fecha y hora límite: *" style="font-weight: 600;"/>
+                    <p:datePicker id="fecha" value="#{tareasController.fechaLimite}" required="true"
+                                  showTime="true" pattern="dd/MM/yyyy HH:mm"
+                                  style="width: 100%;" showIcon="true"/>
 
-                <p:outputLabel for="fechaLimite" value="Fecha límite:"/>
-                <p:datePicker id="fechaLimite"
-                              value="#{tareasController.fechaLimite}"
-                              pattern="dd/MM/yyyy HH:mm"
-                              showTime="true"
-                              hourFormat="24"
-                              required="true"
-                              requiredMessage="La fecha límite es obligatoria."/>
+                    <p:outputLabel for="prioridad" value="Prioridad: *" style="font-weight: 600;"/>
+                    <p:selectOneMenu id="prioridad" value="#{tareasController.prioridad}" required="true"
+                                     style="width: 100%;">
+                        <f:selectItem itemLabel="Selecciona una prioridad" itemValue="" />
+                        <f:selectItem itemLabel="Media" itemValue="Media" />
+                        <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                        <f:selectItem itemLabel="Urgente" itemValue="Urgente" />
+                    </p:selectOneMenu>
 
-                <p:outputLabel for="prioridad" value="Prioridad:"/>
-                <p:selectOneMenu id="prioridad"
-                                 value="#{tareasController.prioridad}"
-                                 required="true"
-                                 requiredMessage="Selecciona una prioridad.">
-                    <f:selectItem itemLabel="Selecciona una prioridad"
-                                  itemValue=""
-                                  noSelectionOption="true"/>
-                    <f:selectItem itemLabel="Urgente" itemValue="urgente"/>
-                    <f:selectItem itemLabel="Alta" itemValue="alta"/>
-                    <f:selectItem itemLabel="Media" itemValue="media"/>
-                    <f:selectItem itemLabel="Baja" itemValue="baja"/>
-                </p:selectOneMenu>
+                </h:panelGrid>
 
-            </p:panelGrid>
+                <p:divider style="margin: 20px 0;" />
 
-            <p:separator/>
+                <div style="display: flex; gap: 15px;">
+                    <p:commandButton value="Guardar tarea" icon="pi pi-save"
+                                     action="#{tareasController.guardarTarea}"
+                                     update="formRegistro:mensajes @form"
+                                     styleClass="btn-uabc" />
 
-            <p:commandButton value="Guardar tarea"
-                             action="#{tareasController.guardarTarea}"
-                             update="formTarea"
-                             icon="pi pi-save"/>
-
-            <p:button value="Volver al menú de tareas"
-                      outcome="gestion_tareas.xhtml"
-                      icon="pi pi-arrow-left"
-                      style="margin-left: 15px;"/>
-
-        </p:panel>
-
-    </h:form>
-
+                    <p:commandButton value="Volver al menú" icon="pi pi-arrow-left"
+                                     action="gestion_tareas?faces-redirect=true"
+                                     immediate="true"
+                                     styleClass="btn-uabc-outline" />
+                </div>
+            </h:form>
+        </p:card>
+    </div>
 </h:body>
 </html>
