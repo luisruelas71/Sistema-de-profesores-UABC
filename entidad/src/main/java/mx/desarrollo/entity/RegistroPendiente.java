@@ -2,7 +2,7 @@ package mx.desarrollo.entity;
 
 import java.time.LocalDateTime;
 
-/** Solicitud de cuenta pendiente de verificar. NO es una entidad JPA: vive en memoria. */
+
 
 
 public class RegistroPendiente {
