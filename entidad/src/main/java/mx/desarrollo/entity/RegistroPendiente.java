@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 
 
+
 public class RegistroPendiente {
 
     private final String correo;
