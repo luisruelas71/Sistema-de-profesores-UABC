@@ -1,7 +1,8 @@
 package mx.desarrollo.integration;
 
-import mx.desarrollo.facade.FacadeProfesor;
 import mx.desarrollo.facade.FacadeFirma;
+import mx.desarrollo.facade.FacadeProfesor;
+import mx.desarrollo.facade.FacadeRegistro;
 import mx.desarrollo.facade.FacadeTarea;
 
 public class ServiceFacadeLocator {
@@ -9,6 +10,7 @@ public class ServiceFacadeLocator {
     private static FacadeProfesor facadeProfesor;
     private static FacadeFirma facadeFirma;
     private static FacadeTarea facadeTarea;
+    private static FacadeRegistro facadeRegistro;
 
     private ServiceFacadeLocator() {
     }
@@ -32,5 +34,12 @@ public class ServiceFacadeLocator {
             facadeTarea = new FacadeTarea();
         }
         return facadeTarea;
+    }
+
+    public static synchronized FacadeRegistro getFacadeRegistro() {
+        if (facadeRegistro == null) {
+            facadeRegistro = new FacadeRegistro();
+        }
+        return facadeRegistro;
     }
 }
