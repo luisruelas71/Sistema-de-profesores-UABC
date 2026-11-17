@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="jakarta.faces.passthrough">
+<f:metadata>
+    <f:event type="preRenderView" listener="#{registroController.validarPantallaVerificacion}"/>
+</f:metadata>
+<h:head>
+    <title>Verificar código - Sistema de Profesores</title>
+    <h:outputStylesheet library="css" name="login.css"/>
+</h:head>
+<h:body styleClass="login-body">
+    <div class="deco deco-1"></div>
+    <div class="deco deco-2"></div>
+
+    <div class="login-card">
+        <h:graphicImage library="img" name="escudo_uabc.png" styleClass="login-logo" alt="UABC"/>
+        <h1 class="login-title">Verifica tu correo</h1>
+        <p class="login-subtitulo">Enviamos un código de 6 dígitos a<br/>
+            <strong>#{registroController.correoPendiente}</strong></p>
+
+        <h:form id="verificarForm">
+            <p:messages id="mensajes" showDetail="false" closable="false"/>
+
+            <p:inputText id="codigo" value="#{registroController.codigo}"
+                         styleClass="login-input codigo-input" maxlength="6"
+                         pt:inputmode="numeric" pt:autocomplete="one-time-code"
+                         pt:placeholder="000000"/>
+            <p class="login-ayuda login-centrado">El código vence en 10 minutos</p>
+
+            <p:commandButton id="btnVerificar" value="Verificar"
+                             action="#{registroController.verificarCodigo}"
+                             ajax="false" styleClass="login-boton"/>
+
+            <p:commandButton id="btnReenviar" value="Reenviar código"
+                             action="#{registroController.reenviarCodigo}"
+                             ajax="false" immediate="true" styleClass="login-boton-sec"/>
+
+            <p class="login-registro">
+                <h:commandLink value="Cambiar correo" action="#{registroController.cambiarCorreo}"
+                               immediate="true" styleClass="link-registro"/>
+            </p>
+        </h:form>
+    </div>
+
+    <p class="login-pie">© Universidad Autónoma de Baja California</p>
+</h:body>
+</html>

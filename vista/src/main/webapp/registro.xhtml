@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="jakarta.faces.passthrough">
+<h:head>
+    <title>Crear cuenta - Sistema de Profesores</title>
+    <h:outputStylesheet library="css" name="login.css"/>
+</h:head>
+<h:body styleClass="login-body">
+    <div class="deco deco-1"></div>
+    <div class="deco deco-2"></div>
+
+    <div class="login-card">
+        <h:graphicImage library="img" name="escudo_uabc.png" styleClass="login-logo" alt="UABC"/>
+        <h1 class="login-title">Crear cuenta</h1>
+        <p class="login-subtitulo">Usa tu correo institucional @uabc.edu.mx</p>
+
+        <h:form id="registroForm">
+            <p:messages id="mensajes" showDetail="false" closable="false"/>
+
+            <h:outputLabel for="correo" value="Correo institucional" styleClass="login-label"/>
+            <p:inputText id="correo" value="#{registroController.correo}"
+                         styleClass="login-input" maxlength="60"
+                         pt:placeholder="@uabc.edu.mx"/>
+
+            <h:outputLabel for="contrasena" value="Contraseña" styleClass="login-label"/>
+            <p:password id="contrasena" value="#{registroController.contrasena}"
+                        styleClass="login-input" feedback="false" maxlength="60"/>
+            <p class="login-ayuda">Mínimo 8 caracteres</p>
+
+            <h:outputLabel for="confirmacion" value="Confirmar contraseña" styleClass="login-label"/>
+            <p:password id="confirmacion" value="#{registroController.confirmacion}"
+                        styleClass="login-input" feedback="false" maxlength="60"/>
+
+            <h:outputLabel for="tipo" value="Tipo de profesor" styleClass="login-label"/>
+            <h:selectOneMenu id="tipo" value="#{registroController.idTipo}" styleClass="login-input">
+                <f:selectItem itemLabel="Selecciona tu tipo" noSelectionOption="true"/>
+                <f:selectItems value="#{registroController.tipos}" var="t"
+                               itemValue="#{t.id}" itemLabel="#{t.nombreTipo}"/>
+            </h:selectOneMenu>
+
+            <p:commandButton id="btnEnviar" value="Enviar código"
+                             action="#{registroController.solicitarRegistro}"
+                             ajax="false" styleClass="login-boton"/>
+        </h:form>
+
+        <p class="login-registro">¿Ya tienes cuenta?
+            <h:link outcome="login" value="Iniciar sesión" styleClass="link-registro"/>
+        </p>
+    </div>
+
+    <p class="login-pie">© Universidad Autónoma de Baja California</p>
+</h:body>
+</html>
