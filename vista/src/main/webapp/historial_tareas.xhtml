@@ -57,6 +57,13 @@
                     <!-- Contenedor flexbox para separar los botones con gap -->
                     <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
 
+                        <p:commandButton icon="pi pi-pencil" value="Editar"
+                                         action="#{historialTareasController.seleccionarTarea(tarea)}"
+                                         process="@this"
+                                         update="formTareas:dialogoEditar"
+                                         oncomplete="PF('dialogoEditarWidget').show()"
+                                         styleClass="ui-button-info" />
+
                         <p:commandButton icon="pi pi-check" value="Completar"
                                          action="#{historialTareasController.cambiarEstado(tarea.id, true)}"
                                          update="formTareas:tablaTareas formTareas:messages"
@@ -76,14 +83,84 @@
                                          update="formTareas:tablaTareas formTareas:messages"
                                          oncomplete="PF('tareasTable').filter()"
                                          styleClass="ui-button-danger" />
+
                     </div>
                 </p:column>
             </p:dataTable>
 
+            <p:dialog id="dialogoEditar"
+                      header="Editar tarea"
+                      widgetVar="dialogoEditarWidget"
+                      modal="true"
+                      responsive="true"
+                      closable="true"
+                      resizable="false">
+
+                <p:messages id="mensajesEdicion" showDetail="true" closable="true" />
+
+                <h:panelGrid columns="1" cellpadding="8" style="width: 100%;">
+
+                    <p:outputLabel for="tituloEditar" value="Título:" />
+                    <p:inputText id="tituloEditar"
+                                 value="#{historialTareasController.tareaSeleccionada.titulo}"
+                                 required="true"
+                                 maxlength="50"
+                                 style="width:100%;" />
+
+                    <p:outputLabel for="descripcionEditar" value="Descripción:" />
+                    <p:inputTextarea id="descripcionEditar"
+                                     value="#{historialTareasController.tareaSeleccionada.descripcion}"
+                                     required="true"
+                                     maxlength="200"
+                                     rows="4"
+                                     style="width:100%;" />
+
+                    <p:outputLabel for="fechaEditar" value="Fecha límite:" />
+                    <p:datePicker id="fechaEditar"
+                                  value="#{historialTareasController.tareaSeleccionada.fechaLimite}"
+                                  required="true"
+                                  showTime="true"
+                                  pattern="dd/MM/yyyy HH:mm"
+                                  showIcon="true" />
+
+                    <p:outputLabel for="prioridadEditar" value="Prioridad:" />
+                    <p:selectOneMenu id="prioridadEditar"
+                                     value="#{historialTareasController.tareaSeleccionada.prioridad}"
+                                     required="true"
+                                     style="width:100%;">
+                        <f:selectItem itemLabel="Selecciona una prioridad" itemValue="" />
+                        <f:selectItem itemLabel="Media" itemValue="Media" />
+                        <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                        <f:selectItem itemLabel="Urgente" itemValue="Urgente" />
+                    </p:selectOneMenu>
+
+                </h:panelGrid>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Guardar cambios"
+                                     icon="pi pi-save"
+                                     action="#{historialTareasController.actualizarTarea}"
+                                     process="dialogoEditar"
+                                     update="formTareas:tablaTareas formTareas:messages formTareas:dialogoEditar"
+                                     oncomplete="if (!args.validationFailed) PF('dialogoEditarWidget').hide()"
+                                     styleClass="ui-button-success" />
+
+                    <p:commandButton value="Cancelar"
+                                     type="button"
+                                     icon="pi pi-times"
+                                     onclick="PF('dialogoEditarWidget').hide()"
+                                     styleClass="ui-button-secondary" />
+                </f:facet>
+
+            </p:dialog>
+
             <div style="margin-top: 20px;">
-                <p:commandButton value="Volver al menú" icon="pi pi-arrow-left"
-                                 action="gestion_tareas?faces-redirect=true"
-                                 styleClass="btn-uabc-outline" />
+
+                <p:button value="Volver al menú"
+                          icon="pi pi-arrow-left"
+                          outcome="/gestion_tareas.xhtml"
+                          styleClass="btn-uabc-outline" />
+
             </div>
         </h:form>
     </div>

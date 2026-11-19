@@ -25,6 +25,9 @@ public class HistorialTareas implements Serializable {
 
     private final DelegateTarea delegate = new DelegateTarea();
 
+    private Tarea tareaSeleccionada;
+    private Integer idTareaSeleccionada;
+
     @PostConstruct
     public void cargarTareas() {
         Map<String, Object> sesion = FacesContext.getCurrentInstance()
@@ -37,6 +40,11 @@ public class HistorialTareas implements Serializable {
 
             tareasFiltradas = null;
         }
+    }
+
+    public void seleccionarTarea(Tarea tarea) {
+        this.tareaSeleccionada = tarea;
+        this.idTareaSeleccionada = tarea.getId();
     }
 
     public void eliminarTarea(Integer idTarea) {
@@ -88,6 +96,51 @@ public class HistorialTareas implements Serializable {
         }
     }
 
+    public void actualizarTarea() {
+        try {
+            Map<String, Object> sesion = FacesContext.getCurrentInstance()
+                    .getExternalContext().getSessionMap();
+
+            Integer idProfesor = (Integer) sesion.get("profesorId");
+
+            if (idProfesor == null) {
+                mostrarMensaje(FacesMessage.SEVERITY_ERROR,
+                        "No hay una sesión activa.");
+                return;
+            }
+
+            if (tareaSeleccionada == null || idTareaSeleccionada == null) {
+                mostrarMensaje(FacesMessage.SEVERITY_ERROR,
+                        "No se ha seleccionado ninguna tarea.");
+                return;
+            }
+
+            tareaSeleccionada.setId(idTareaSeleccionada);
+
+            boolean actualizada = delegate.actualizarTarea(
+                    tareaSeleccionada, idProfesor);
+
+            if (actualizada) {
+                mostrarMensaje(FacesMessage.SEVERITY_INFO,
+                        "Tarea actualizada correctamente.");
+
+                cargarTareas();
+
+            } else {
+                mostrarMensaje(FacesMessage.SEVERITY_WARN,
+                        "No se encontró la tarea o no pertenece a tu usuario.");
+            }
+
+        } catch (IllegalArgumentException e) {
+            mostrarMensaje(FacesMessage.SEVERITY_ERROR, e.getMessage());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarMensaje(FacesMessage.SEVERITY_ERROR,
+                    "Ocurrió un error al actualizar la tarea.");
+        }
+    }
+
     private void mostrarMensaje(FacesMessage.Severity tipo, String mensaje) {
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(tipo, mensaje, null));
@@ -107,5 +160,21 @@ public class HistorialTareas implements Serializable {
 
     public void setTareasFiltradas(List<Tarea> tareasFiltradas) {
         this.tareasFiltradas = tareasFiltradas;
+    }
+
+    public Tarea getTareaSeleccionada() {
+        return tareaSeleccionada;
+    }
+
+    public void setTareaSeleccionada(Tarea tareaSeleccionada) {
+        this.tareaSeleccionada = tareaSeleccionada;
+    }
+
+    public Integer getIdTareaSeleccionada() {
+        return idTareaSeleccionada;
+    }
+
+    public void setIdTareaSeleccionada(Integer idTareaSeleccionada) {
+        this.idTareaSeleccionada = idTareaSeleccionada;
     }
 }

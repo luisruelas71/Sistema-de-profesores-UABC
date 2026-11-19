@@ -1,4 +1,3 @@
-
 package mx.desarrollo.persistence.dao;
 
 import jakarta.persistence.EntityManager;
@@ -47,15 +46,31 @@ public class TareaDAO {
         }
     }
 
-    public void actualizar(Tarea tarea) {
+    public boolean actualizar(Tarea tarea, int idProfesor) {
         EntityManager em = hibernateUtils.getEntityManager();
 
         try {
             em.getTransaction().begin();
 
-            em.merge(tarea);
+            int filasActualizadas = em.createQuery(
+                            "UPDATE Tarea t SET " +
+                                    "t.titulo = :titulo, " +
+                                    "t.descripcion = :descripcion, " +
+                                    "t.fechaLimite = :fechaLimite, " +
+                                    "t.prioridad = :prioridad " +
+                                    "WHERE t.id = :idTarea " +
+                                    "AND t.profesor.id = :idProfesor")
+                    .setParameter("titulo", tarea.getTitulo())
+                    .setParameter("descripcion", tarea.getDescripcion())
+                    .setParameter("fechaLimite", tarea.getFechaLimite())
+                    .setParameter("prioridad", tarea.getPrioridad())
+                    .setParameter("idTarea", tarea.getId())
+                    .setParameter("idProfesor", idProfesor)
+                    .executeUpdate();
 
             em.getTransaction().commit();
+
+            return filasActualizadas > 0;
 
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {

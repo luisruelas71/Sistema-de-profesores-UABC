@@ -19,8 +19,9 @@ public class DelegateTarea {
         return ServiceFacadeLocator.getFacadeTarea().eliminarTarea(idTarea, idProfesor);
     }
 
-    public void actualizarTarea(Tarea tarea) {
-        mx.desarrollo.integration.ServiceFacadeLocator.getFacadeTarea().actualizarTarea(tarea);
+    public boolean actualizarTarea(Tarea tarea, int idProfesor) {
+        return ServiceFacadeLocator.getFacadeTarea()
+                .actualizarTarea(tarea, idProfesor);
     }
 
     public void cambiarEstado(int idTarea, boolean estado) {
