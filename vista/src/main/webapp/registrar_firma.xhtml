@@ -5,142 +5,76 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Confirmación de firma</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #FFFFFF;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-
-        .titulo-pantalla {
-            color: #333333;
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .main-container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 40px;
-            flex-grow: 1; /* Permite que el contenedor crezca y llene la pantalla */
-        }
-
-        .form-firma {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 40px;
-            flex-grow: 1; /* El formulario ocupa el espacio restante */
-        }
-
-        .foto-preview {
-            width: 100%;
-            height: 350px;
-            background-color: #F5F5F5;
-            border-radius: 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #888888;
-            font-size: 20px;
-        }
-        .foto-preview i { font-size: 64px; margin-bottom: 15px; }
-
-        .gps-box {
-            width: 100%;
-            padding: 30px;
-            border: 2px solid #E0E0E0;
-            border-radius: 12px;
-            text-align: center;
-            color: #333333;
-            font-size: 20px;
-            box-sizing: border-box;
-        }
-
-        .botones-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 30px;
-            width: 100%;
-            margin-top: auto; /* Esto empuja los botones hasta el límite inferior */
-        }
-
-        .btn-rechazar, .btn-aceptar {
-            flex: 1;
-            font-size: 20px !important;
-            padding: 20px !important;
-            border-radius: 12px !important;
-            font-weight: bold !important;
-            box-shadow: none !important;
-            text-shadow: none !important;
-            text-align: center;
-        }
-
-        .btn-rechazar {
-            background-color: transparent !important;
-            color: #D32F2F !important;
-            border: 2px solid #D32F2F !important;
-        }
-        .btn-rechazar:hover { background-color: #FFF0F0 !important; }
-
-        .btn-aceptar {
-            background-color: #006B3F !important;
-            color: white !important;
-            border: none !important;
-        }
-        .btn-aceptar:hover { background-color: #00502F !important; }
-
-        .btn-bloqueado { opacity: 0.5; pointer-events: none; cursor: not-allowed; }
-    </style>
+    <title>Confirmación de Firma - UABC</title>
+    <h:outputStylesheet library="css" name="PaginaNavegacion.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </h:head>
 <h:body>
 
-    <div class="titulo-pantalla">Confirmación de firma</div>
+    <div class="header-portal">
+        <div class="logo-container">
+            <h:graphicImage library="img" name="escudo_uabc.png" alt="Logo UABC" styleClass="logo-uabc"/>
+            <div class="titulo-universidad">
+                Universidad Autónoma<br/>de Baja California
+            </div>
+        </div>
+    </div>
 
     <div class="main-container">
 
-        <div class="foto-preview">
-            <i class="fa-regular fa-image"></i>
-            <span>Captured Photo</span>
+        <div style="margin-bottom: 1.5rem;">
+            <h:outputLink value="firmas.xhtml" styleClass="btn-volver">
+                &#8592; Volver al menu
+            </h:outputLink>
         </div>
 
-        <h:form id="formFirma" styleClass="form-firma">
-            <h:messages globalOnly="true" style="color: red;" />
+        <div class="seccion-subtitulo">Registro Digital</div>
+        <h1 class="titulo-pagina">Confirmacion de Firma</h1>
+        <p class="descripcion-pagina">precisión de la ubicacion GPS.</p>
 
-            <h:inputHidden id="inputUbicacion" value="#{firmaController.ubicacion}" />
+        <div class="card-uabc" style="height: auto; overflow: visible;">
 
-            <div class="gps-box">
-                <span id="txtUbicacion" style="color: gray;">Obteniendo coordenadas...</span>
+            <div style="width: 100%; height: 200px; background-color: var(--fondo-pantalla); border: 2px dashed var(--borde-tarjeta); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--texto-secundario); gap: 0.75rem; margin-bottom: 1.5rem;">
+                <i class="fa-solid fa-signature" style="font-size: 3.5rem; color: var(--uabc-verde);"></i>
+                <span style="font-size: 1rem; font-weight: 600;">Vista previa de la firma digital</span>
             </div>
 
-            <div class="botones-container">
-                <p:commandButton value="Rechazar"
-                                 action="#{firmaController.rechazarFirma}"
-                                 ajax="false"
-                                 styleClass="btn-rechazar" />
+            <h:form id="formFirma" style="width: 100%;">
+                <h:messages globalOnly="true" style="color: #D32F2F; margin-bottom: 1rem; font-weight: 600;" />
 
-                <p:commandButton id="btnGuardar"
-                                 value="Aceptar Firma"
-                                 action="#{firmaController.guardarFirmaFinal}"
-                                 ajax="false"
-                                 styleClass="btn-aceptar btn-bloqueado" />
-            </div>
-        </h:form>
+                <h:inputHidden id="inputUbicacion" value="#{firmaController.ubicacion}" />
+
+                <div style="background-color: var(--fondo-pantalla); border-left: 4px solid var(--uabc-verde); padding: 1rem 1.25rem; border-radius: 8px; display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; font-weight: 600; color: var(--texto-principal); margin-bottom: 1.5rem;">
+                    <i class="fa-solid fa-location-dot" style="color: var(--uabc-verde); font-size: 1.25rem;"></i>
+                    <span id="txtUbicacion">Obteniendo coordenadas GPS...</span>
+                </div>
+
+                <!-- Botones -->
+                <div style="display: flex; justify-content: space-between; gap: 1.5rem;">
+                    <p:commandButton value="Rechazar"
+                                     action="#{firmaController.rechazarFirma}"
+                                     ajax="false"
+                                     styleClass="btn-uabc-outline"
+                                     style="flex: 1; height: 48px; font-size: 1rem;" />
+
+                    <p:commandButton id="btnGuardar"
+                                     value="Aceptar Firma"
+                                     action="#{firmaController.guardarFirmaFinal}"
+                                     ajax="false"
+                                     styleClass="btn-uabc btn-bloqueado"
+                                     style="flex: 1; height: 48px; font-size: 1rem;" />
+                </div>
+            </h:form>
+        </div>
+    </div>
+
+    <!-- Pie de Página Institucional -->
+    <div class="footer-portal">
+        <p>Universidad Autónoma de Baja California</p>
+        <div class="footer-fecha">
+            <div class="footer-linea"></div>
+            <span>Gestión Académica</span>
+        </div>
     </div>
 
     <script>
@@ -154,7 +88,7 @@
                         var coords = position.coords.latitude + ", " + position.coords.longitude;
                         inputHidden.value = coords;
                         txtUbicacion.textContent = "Ubicación GPS: " + coords;
-                        txtUbicacion.style.color = "#333333";
+                        txtUbicacion.style.color = "var(--texto-principal)";
 
                         var btnElement = document.getElementById("formFirma:btnGuardar");
                         if (btnElement) {
@@ -163,13 +97,13 @@
                     },
                     function(error) {
                         txtUbicacion.textContent = "Error GPS: " + error.message;
-                        txtUbicacion.style.color = "red";
+                        txtUbicacion.style.color = "#D32F2F";
                     },
                     { enableHighAccuracy: true }
                 );
             } else {
                 txtUbicacion.textContent = "Geolocalización no soportada por el navegador.";
-                txtUbicacion.style.color = "red";
+                txtUbicacion.style.color = "#D32F2F";
             }
         }
 

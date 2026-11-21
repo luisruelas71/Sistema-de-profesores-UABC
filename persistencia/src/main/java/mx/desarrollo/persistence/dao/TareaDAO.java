@@ -113,25 +113,22 @@ public class TareaDAO {
         try {
             em.getTransaction().begin();
 
-            int filasEliminadas = em.createQuery(
-                            "DELETE FROM Tarea t " +
-                                    "WHERE t.id = :idTarea " +
-                                    "AND t.profesor.id = :idProfesor")
-                    .setParameter("idTarea", idTarea)
-                    .setParameter("idProfesor", idProfesor)
-                    .executeUpdate();
+            Tarea tarea = em.find(Tarea.class, idTarea);
 
-            em.getTransaction().commit();
+            if (tarea != null && tarea.getProfesor() != null && tarea.getProfesor().getId() == idProfesor) {
+                em.remove(tarea);
+                em.getTransaction().commit();
+                return true;
+            }
 
-            return filasEliminadas > 0;
+            em.getTransaction().rollback();
+            return false;
 
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-
             throw new RuntimeException("Error al eliminar la tarea", e);
-
         } finally {
             em.close();
         }

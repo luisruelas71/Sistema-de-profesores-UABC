@@ -104,13 +104,13 @@ public class Firma implements Serializable {
         mostrarMensaje(FacesMessage.SEVERITY_WARN, "Cancelado: No se registró la firma.");
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
-        return "captura_foto?faces-redirect=true";
+        return "firmas?faces-redirect=true";
     }
 
     public String guardarFirmaFinal() {
         String resultado = guardarFirma();
 
-        if ("firmas?faces-redirect=true".equals(resultado)) {
+        if ("inicio?faces-redirect=true".equals(resultado)) {
             mostrarMensaje(FacesMessage.SEVERITY_INFO, "Éxito: La firma se registró correctamente.");
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         }

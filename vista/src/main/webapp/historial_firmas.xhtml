@@ -32,8 +32,45 @@
         <h:form id="formHistorial">
             <p:growl id="mensajes" showDetail="true" life="3000"/>
 
+            <!-- PANEL DE FILTRADO Y ORDENACIÓN POR FECHAS -->
+            <p:panel header="Filtrar y Ordenar por Fechas" style="margin-top: 15px; margin-bottom: 15px;">
+                <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <div>
+                        <p:outputLabel for="fechaInicio" value="Fecha Inicio: " style="font-weight: bold; margin-right: 5px;"/>
+                        <p:datePicker id="fechaInicio" value="#{historialFirmasController.fechaInicio}"
+                                      pattern="dd/MM/yyyy" showIcon="true" placeholder="dd/mm/aaaa"/>
+                    </div>
+
+                    <div>
+                        <p:outputLabel for="fechaFin" value="Fecha Fin: " style="font-weight: bold; margin-right: 5px;"/>
+                        <p:datePicker id="fechaFin" value="#{historialFirmasController.fechaFin}"
+                                      pattern="dd/MM/yyyy" showIcon="true" placeholder="dd/mm/aaaa"/>
+                    </div>
+
+                    <div>
+                        <p:outputLabel for="ordenFecha" value="Orden: " style="font-weight: bold; margin-right: 5px;"/>
+                        <p:selectOneMenu id="ordenFecha" value="#{historialFirmasController.ordenFecha}">
+                            <f:selectItem itemLabel="Descendente (Más reciente a antigua)" itemValue="DESC" />
+                            <f:selectItem itemLabel="Ascendente (Más antigua a reciente)" itemValue="ASC" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <p:commandButton value="Filtrar" icon="pi pi-filter"
+                                         action="#{historialFirmasController.filtrar}"
+                                         update="formHistorial:tablaFirmas formHistorial:mensajes"
+                                         styleClass="ui-button-success"/>
+
+                        <p:commandButton value="Limpiar" icon="pi pi-refresh"
+                                         action="#{historialFirmasController.limpiarFiltro}"
+                                         update="formHistorial:fechaInicio formHistorial:fechaFin formHistorial:ordenFecha formHistorial:tablaFirmas formHistorial:mensajes"
+                                         styleClass="ui-button-secondary"/>
+                    </div>
+                </div>
+            </p:panel>
+
             <!-- Tabla de datos (Data Table) -->
-            <p:dataTable value="#{historialFirmasController.firmas}" var="firma"
+            <p:dataTable id="tablaFirmas" value="#{historialFirmasController.firmas}" var="firma"
                          emptyMessage="No tienes firmas registradas."
                          paginator="true" rows="10" style="margin-top: 20px;">
 
@@ -55,7 +92,7 @@
                                      title="Eliminar Firma"
                                      styleClass="ui-button-danger rounded-button"
                                      action="#{historialFirmasController.eliminarFirma(firma.id)}"
-                                     update="formHistorial:mensajes @form">
+                                     update="formHistorial:mensajes formHistorial:tablaFirmas">
                         <p:confirm header="Confirmación"
                                    message="¿Estás seguro de que deseas eliminar esta firma?"
                                    icon="pi pi-exclamation-triangle"/>

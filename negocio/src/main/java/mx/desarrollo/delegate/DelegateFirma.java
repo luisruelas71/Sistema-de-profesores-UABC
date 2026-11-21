@@ -2,6 +2,8 @@ package mx.desarrollo.delegate;
 
 import mx.desarrollo.entity.Firma;
 import mx.desarrollo.integration.ServiceFacadeLocator;
+import java.time.LocalDate;
+import java.util.List;
 
 public class DelegateFirma {
 
@@ -9,8 +11,12 @@ public class DelegateFirma {
         return ServiceFacadeLocator.getFacadeFirma().registrarFirma(firma);
     }
 
-    public java.util.List<Firma> obtenerPorProfesor(Integer idProfesor) {
-        return ServiceFacadeLocator.getFacadeFirma().obtenerPorProfesor(idProfesor);
+    public List<Firma> obtenerPorProfesor(Integer idProfesor, String orden) {
+        return ServiceFacadeLocator.getFacadeFirma().obtenerPorProfesor(idProfesor, orden);
+    }
+
+    public List<Firma> obtenerPorProfesorYFechas(Integer idProfesor, LocalDate fechaInicio, LocalDate fechaFin, String orden) {
+        return ServiceFacadeLocator.getFacadeFirma().obtenerPorProfesorYFechas(idProfesor, fechaInicio, fechaFin, orden);
     }
 
     public boolean eliminarFirma(Integer idFirma) {

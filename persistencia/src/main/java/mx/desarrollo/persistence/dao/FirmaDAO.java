@@ -3,6 +3,7 @@ import jakarta.persistence.EntityManager;
 import mx.desarrollo.entity.Firma;
 import mx.desarrollo.persistence.persistence.hibernateUtils;
 import java.util.List;
+import java.time.LocalDate;
 
 public class FirmaDAO {
 
@@ -25,12 +26,31 @@ public class FirmaDAO {
         }
     }
 
-    // Método para obtener todas las firmas de un profesor específico
-    public java.util.List<Firma> obtenerPorProfesor(Integer idProfesor) {
+    // Consulta con ordenación configurable
+    public List<Firma> obtenerPorProfesor(Integer idProfesor, String orden) {
         EntityManager em = hibernateUtils.getEntityManager();
+        String sentido = ("ASC".equalsIgnoreCase(orden)) ? "ASC" : "DESC";
         try {
-            return em.createQuery("SELECT f FROM Firma f WHERE f.profesor.id = :idProfesor ORDER BY f.fecha DESC, f.hora DESC", Firma.class)
+            return em.createQuery("SELECT f FROM Firma f WHERE f.profesor.id = :idProfesor " +
+                            "ORDER BY f.fecha " + sentido + ", f.hora " + sentido, Firma.class)
                     .setParameter("idProfesor", idProfesor)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    // Consulta filtrada por fechas y ordenación configurable
+    public List<Firma> obtenerPorProfesorYFechas(Integer idProfesor, LocalDate fechaInicio, LocalDate fechaFin, String orden) {
+        EntityManager em = hibernateUtils.getEntityManager();
+        String sentido = ("ASC".equalsIgnoreCase(orden)) ? "ASC" : "DESC";
+        try {
+            return em.createQuery("SELECT f FROM Firma f WHERE f.profesor.id = :idProfesor " +
+                            "AND f.fecha >= :fechaInicio AND f.fecha <= :fechaFin " +
+                            "ORDER BY f.fecha " + sentido + ", f.hora " + sentido, Firma.class)
+                    .setParameter("idProfesor", idProfesor)
+                    .setParameter("fechaInicio", fechaInicio)
+                    .setParameter("fechaFin", fechaFin)
                     .getResultList();
         } finally {
             em.close();
